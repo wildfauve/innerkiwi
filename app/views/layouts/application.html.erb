@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title><%= content_for?(:title) ? yield(:title) : "Inner Kiwi" %></title>
+
+    <%= stylesheet_link_tag    "application" %>
+    <%= javascript_include_tag "vendor/modernizr" %>
+    <%= csrf_meta_tags %>
+  </head>
+
+  <body>
+    <div class="icon-bar five-up">
+      <a class="item">
+        <i class="fi-home"></i>
+        <label>Home</label>
+      </a>
+      <% if @current_user_proxy %>
+        <%= link_to(accounts_path, class: "item") do %>
+          <i class="fi-dollar"></i>
+          <label>Accounts</label>
+        <% end %>      
+        <%= link_to(settings_path, class: "item") do %>
+          <i class="fi-widget"></i>
+          <label>Settings</label>
+        <% end %>      
+        
+        <%= link_to(logout_identities_path, method: :put, class: "item") do %>
+          <i class="fi-lock"></i>
+          <label>Logout</label>
+        <% end %>
+        
+        
+      <% else %>
+        <%= link_to(sign_up_identities_path, class: "item") do %>
+          <i class="fi-like"></i>
+          <label>Sign Up</label>
+        <% end %>
+            
+        <%= link_to(login_identities_path, class: "item") do %>
+          <i class="fi-unlock"></i>
+          <label>Login</label>
+        <% end %>      
+      <% end %>
+    </div>
+        
+    
+    <%= yield %>
+    <%= javascript_include_tag "application" %>
+  </body>
+</html>

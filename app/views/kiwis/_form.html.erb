@@ -1,0 +1,32 @@
+<%= form_for(@kiwi, html: { class: "custom"}) do |f| %>
+   <div class="row">
+     <div class="small-2 columns">
+       <%= f.label :name, class: "right inline", title: "Whats ya handle", data: {tooltip: true } %>
+     </div>
+     <div class="small-10 columns">
+       <%= f.text_field :name, placeholder: "whats ya handle" %>
+     </div> 
+   </div>
+   <div class="row">
+     <div class="small-2 columns">
+       <%= f.label :age, class: "right inline" %>
+     </div>
+     <div class="small-10 columns">
+       <%= f.text_field :age, placeholder: "age" %>
+     </div> 
+   </div>
+
+   <div class="row">
+     <div class="small-2 columns">
+       <%= f.label :twitter_handle, class: "right inline", title: "on Twitter", data: {tooltip: true } %>
+     </div>
+     <div class="small-10 columns">
+        <%= f.text_field :twitter_handle, placeholder: "twitter handle" %>
+     </div> 
+   </div>
+   <div class="row">
+     <div class="small-10 small-offset-2 columns">
+       <%= f.submit 'Submit', :class => 'button small' %>
+     </div>
+   </div>
+<% end %>
