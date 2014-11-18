@@ -52,9 +52,13 @@ class UserProxy
     save
     self
   end
-    
-  def has_a_kiwi?
-    self.kiwi ? true : false
+  
+  def requires_a_kiwi?
+    if Setting.oauth(:require_additional_identity)
+      self.kiwi ? false : true
+    else
+      false
+    end
   end
   
 end

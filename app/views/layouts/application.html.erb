@@ -26,14 +26,16 @@
           <i class="fi-widget"></i>
           <label>Settings</label>
         <% end %>      
+        <%= link_to(products_path, class: "item") do %>
+          <i class="fi-like"></i>
+          <label>Products</label>
+        <% end %>        
         
         <%= link_to(logout_identities_path, method: :put, class: "item") do %>
           <i class="fi-lock"></i>
           <label>Logout</label>
         <% end %>
-        
-        
-      <% else %>
+      <% else %>      
         <%= link_to(sign_up_identities_path, class: "item") do %>
           <i class="fi-like"></i>
           <label>Sign Up</label>
@@ -49,5 +51,6 @@
     
     <%= yield %>
     <%= javascript_include_tag "application" %>
+    
   </body>
 </html>

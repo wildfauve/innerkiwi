@@ -36,4 +36,9 @@ class IdentitiesController < ApplicationController
     redirect_to new_kiwi_path(scope: :sign_up)
   end
   
+  def login_error
+    flash.now.alert = "Invalid Login"
+    render 'shared/login_error'
+    
+  end  
 end

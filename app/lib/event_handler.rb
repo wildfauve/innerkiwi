@@ -1,7 +1,5 @@
 class EventHandler
   
-  PARTY_QUEUE = "party_queue"
-  
   # In order to publish message we need a exchange name.
     # Note that RabbitMQ does not care about the payload -
     # we will be using JSON-encoded strings
@@ -26,11 +24,10 @@ class EventHandler
       end
     end
   
-  def self.customer_create_event(customer)
-    self.publish(exchange: "events", message: customer)
-    #$redis.lpush CUST_QUEUE, customer.to_json
-    #Feed.add_to_feed(customer)
-  end
+    # This is not an event at the mo; created through an API call in Kiwi
+  #def self.customer_create_event(customer)
+  #  self.publish(exchange: "events", message: customer.create_event)
+  #end
   
   def self.valid_authorisation(user_proxy)
     self.publish(exchange: "events", message: user_proxy.kiwi.id_kiwi_event)

@@ -10,6 +10,14 @@ Rails.application.routes.draw do
   
   resources :accounts
   
+  resources :products do
+    collection do
+      put 'buy'
+      put 'reset'
+    end
+  end
+  
+  
   resources :identities, only: [:index] do
     collection do
       get 'sign_up'
@@ -18,5 +26,12 @@ Rails.application.routes.draw do
       put 'logout'
     end
   end
+  
+  namespace :api do
+    namespace :v1 do
+      resources :kiwis
+    end
+  end
+  
   
 end

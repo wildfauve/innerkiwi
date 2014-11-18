@@ -1,0 +1,15 @@
+<div class="row">
+   <div class="small-2 columns">
+      <div class="icon-bar large-vertical four-up">
+         <% @accounts.each do |acct| %>
+            <%= link_to(acct.generate_account_link(options: {element_name: "account"}), class: "item", remote: true) do %>
+                <i class="fi-dollar"></i>
+                <label><%= acct.name%></label>
+            <% end %>
+         <% end %>
+      </div>
+   </div>
+   <div class="small-10 columns">
+      <div id="account"></div>
+   </div>
+</div>

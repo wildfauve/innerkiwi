@@ -9,7 +9,8 @@ class ApplicationController < ActionController::Base
   
   
   def current_user_proxy
-    @current_user_proxy ||= UserProxy.find(session[:user_proxy]["proxy_id"]) if session[:user_proxy]  
+    @current_user_proxy ||= UserProxy.find(session[:user_proxy]["proxy_id"]) if session[:user_proxy]
+    @kiwi = @current_user_proxy.kiwi if @current_user_proxy
   end
   
   

@@ -30,26 +30,30 @@ class IdentityAdapter
   #   &redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb
   
   def get_access(params: nil, host: nil)
-    form = { grant_type: "authorization",
-      code: params[:code],
-      redirect_uri: url_helpers.authorisation_identities_url(host: host)
-    }
-    Faraday.new do |c|
-      c.use Faraday::Request::BasicAuthentication
-    end
-    conn = Faraday.new(url: Setting.oauth["id_token_service_url"])
-    conn.params = form
-    conn.basic_auth Setting.oauth["client_id"], Setting.oauth["client_secret"]
-    resp = conn.post
-    raise if resp.status >= 300
-    @access_token = JSON.parse(resp.body)
-    validate_id_token()
-    @user_proxy = UserProxy.set_up_user(access_token: @access_token, id_token: @id_token)
-    if @user_proxy.has_a_kiwi?
-      @user_proxy.kiwi.check_party
-      publish(:valid_authorisation, @user_proxy)
+    if params[:error]
+      publish(:login_error)
     else
-      publish(:create_a_kiwi, @user_proxy)
+      form = { grant_type: "authorization",
+        code: params[:code],
+        redirect_uri: url_helpers.authorisation_identities_url(host: host)
+      }
+      Faraday.new do |c|
+        c.use Faraday::Request::BasicAuthentication
+      end
+      conn = Faraday.new(url: Setting.oauth["id_token_service_url"])
+      conn.params = form
+      conn.basic_auth Setting.oauth["client_id"], Setting.oauth["client_secret"]
+      resp = conn.post
+      raise if resp.status >= 300
+      @access_token = JSON.parse(resp.body)
+      validate_id_token()
+      @user_proxy = UserProxy.set_up_user(access_token: @access_token, id_token: @id_token)
+      if @user_proxy.requires_a_kiwi?
+        publish(:create_a_kiwi, @user_proxy)
+      else
+        @user_proxy.kiwi.check_party
+        publish(:valid_authorisation, @user_proxy)
+      end
     end
   end
   
@@ -65,5 +69,10 @@ class IdentityAdapter
   def id_token_provided?
     @id_token ? true : false
   end
+  
+  def get_claim(type: nil, key: nil)
+    @id_token[type].first {|c| c["ref"] == "party"}
+  end
+    
   
 end
