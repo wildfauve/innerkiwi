@@ -7,10 +7,16 @@
   </thead>
    <tbody>
       <% @products["sales_products"].each do |prod| %>
+         <% purch = @kiwi.get_purchase(product: prod) %>
          <tr>
             <td><%= prod["name"]%></td>
-            <% if @kiwi.has_product(product: prod) %>
-               <td>Already Purchased</td>
+            <% if purch %>
+               <td>
+                  <div data-alert class="alert-box secondary">
+                       <%= purch.purchase_state %>
+                    <a href="#" class="close">&times;</a>
+                  </div>
+               </td>
             <% else %>
                <td><%= link_to "Buy", buy_products_path(prod_origination_url: prod["_links"]["product_originations"]["href"]), class: "button", method: :put%></td>
             <% end %>
@@ -19,6 +25,7 @@
    </tbody>
 </table>
 
-<%= link_to 'Reset', reset_products_path, method: :put, class: "button"%>
+<%= link_to 'Reset All', reset_products_path, method: :put, class: "button"%>
+<%= link_to 'Reset Local', reset_products_path(local: true), method: :put, class: "button"%>
 
 

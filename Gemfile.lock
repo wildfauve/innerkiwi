@@ -129,7 +129,6 @@ GEM
     rake (10.3.2)
     rdoc (4.1.2)
       json (~> 1.4)
-    redis (3.1.0)
     rest_client (1.8.1)
       netrc (~> 0.7.7)
     sass (3.2.19)
@@ -187,7 +186,6 @@ DEPENDENCIES
   pry
   railroady
   rails (= 4.1.2)
-  redis
   rest_client
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)

@@ -20,10 +20,9 @@ class ProductsPort < Port
     self
   end
   
-  def reset_purchases(link: nil)
+  def reset_origination(link: nil)
     conn = Faraday.new(url: link)
-    conn.params = {reset: true}
-    resp = conn.put
+    resp = conn.delete
     raise if resp.status >= 300
     @reset = JSON.parse(resp.body)
     @msg = @reset

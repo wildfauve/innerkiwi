@@ -27,7 +27,7 @@ gem 'spring',        group: :development
 gem 'mongoid', github: 'mongoid/mongoid'
 gem 'wisper'
 
-gem 'redis'
+#gem 'redis'
 
 gem 'rest_client'
 

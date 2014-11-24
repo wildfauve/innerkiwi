@@ -17,7 +17,7 @@ class ProductsController < ApplicationController
   def reset
     prod = ProductsManager.new(kiwi: @current_user_proxy.kiwi)
     prod.subscribe(self)
-    prod.reset
+    prod.reset(params)
   end
   
   def reset_complete

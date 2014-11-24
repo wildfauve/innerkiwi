@@ -17,9 +17,9 @@ class ProductsManager
     publish(:successful_purchase_event, self)
   end
   
-  def reset
-    accts = @kiwi.reset_purchases
-    accts.each {|acct| ProductsPort.new.reset_purchases(link: acct)}
+  def reset(params)
+    buys = @kiwi.purchases.collect {|p| ProductsPort.new.reset_origination(link: p.origination_link)} unless params[:local].present?
+    @kiwi.purchases.delete_all
     publish(:reset_complete)
   end
   

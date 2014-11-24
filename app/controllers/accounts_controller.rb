@@ -1,7 +1,7 @@
 class AccountsController < ApplicationController
   
   def index
-    @accounts = @kiwi.purchases
+    @accounts = @kiwi.purchases.completed
   end 
   
   
