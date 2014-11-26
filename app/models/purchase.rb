@@ -12,6 +12,7 @@ class Purchase
   
   scope :completed, ->{ where({:state.ne => :in_progress}) }
   
+  
   # {"kind"=>"product_origination", "state"=>"purchased", "_links"=>{"self"=>{"href"=>"http://localhost:3022/api/v1/sales_products/5460143c4d61745ef6010000/originations/5463ebb74d617452d4060000"}, "product"=>{"href"=>"http://localhost:3022/api/v1/sales_products/5460143c4d61745ef6010000"}}}
   
   def self.create_me(buy: nil)
@@ -30,7 +31,27 @@ class Purchase
   end
   
   def purchase_state
-    self.state == nil || self.state == :purchased ? :purchased : self.state
+    #Deal with migration to a state 
+    if self.state == nil
+      self.state = :purchased
+      self.save
+      self.state
+    elsif self.state == :purchased
+      self.state
+    else
+      # check the status of the in_progress purchase
+      check_purchase_state()
+      self.state
+    end
+  end
+  
+  def check_purchase_state
+    orig = ProductsPort.new.get_origination(origination_url: origination_link)
+    if orig.origination["state"] == "purchased"
+      self.state = orig.origination["state"]
+      self.account_link = orig.link_for(rel: :account)
+      self.save
+    end
   end
   
   def generate_account_link(options: nil)

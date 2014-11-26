@@ -1,6 +1,6 @@
 class ProductsPort < Port
   
-  attr_accessor :products, :buy
+  attr_accessor :products, :buy, :origination
   
   
   def get_products
@@ -20,6 +20,12 @@ class ProductsPort < Port
     self
   end
   
+  def get_origination(origination_url: nil)
+    conn = Faraday.new(url: origination_url)
+    status_and_parse(resp: conn.get, parse_in_to: "@origination")
+    self
+  end
+  
   def reset_origination(link: nil)
     conn = Faraday.new(url: link)
     resp = conn.delete
@@ -28,6 +34,7 @@ class ProductsPort < Port
     @msg = @reset
     self    
   end
+    
   
     
 end

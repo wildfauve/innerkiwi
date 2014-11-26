@@ -5,21 +5,13 @@ class CustomerPort < Port
   def create_new_customer(kiwi)
     conn = Faraday.new(url: Setting.services(:customers, :create))
     conn.params = customer_msg(kiwi)
-    resp = conn.post
-    raise if resp.status >= 400
-    if resp.status >= 300
-      @error = JSON.parse(resp.body)["status"]
-    else
-      @party = JSON.parse(resp.body)
-    end
+    status_and_parse(resp: conn.post, parse_in_to: "@party")
   end
 
   def update_customer(kiwi)
     conn = Faraday.new(url: kiwi.party_url)
     conn.params = customer_msg(kiwi)
-    resp = conn.put
-    raise if resp.status >= 300
-    @party = JSON.parse(resp.body)
+    status_and_parse(resp: conn.put, parse_in_to: "@party")
   end
   
   def customer_msg(kiwi)
@@ -30,25 +22,15 @@ class CustomerPort < Port
     }
   end
   
-
-  
   def get_customer(url: nil)
     conn = Faraday.new(url: url)
-    resp = conn.get
-    @http_status = resp.status
-    if @http_status >= 300
-      @status = JSON.parse(resp.body)["status"].to_sym
-    else
-      @status = :ok
-      @party = JSON.parse(resp.body)
-    end
+    status_and_parse(resp: conn.get, parse_in_to: "@party")
     self
   end
   
   def buy_customer_product(product_url)
     conn = Faraday.new(url: "")
   end
-
 
   
     
