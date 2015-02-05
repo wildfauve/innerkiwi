@@ -33,19 +33,8 @@ class IdentityAdapter
     if params[:error]
       publish(:login_error)
     else
-      form = { grant_type: "authorization",
-        code: params[:code],
-        redirect_uri: url_helpers.authorisation_identities_url(host: host)
-      }
-      Faraday.new do |c|
-        c.use Faraday::Request::BasicAuthentication
-      end
-      conn = Faraday.new(url: Setting.oauth["id_token_service_url"])
-      conn.params = form
-      conn.basic_auth Setting.oauth["client_id"], Setting.oauth["client_secret"]
-      resp = conn.post
-      raise if resp.status >= 300
-      @access_token = JSON.parse(resp.body)
+      token = IdPort.new.get_access_token(auth_code: params[:code], host: host)
+      @access_token = token.access_token
       validate_id_token()
       @user_proxy = UserProxy.set_up_user(access_token: @access_token, id_token: @id_token)
       if @user_proxy.requires_a_kiwi?

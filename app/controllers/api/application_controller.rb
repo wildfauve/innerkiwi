@@ -7,7 +7,13 @@ class Api::ApplicationController < ActionController::Base
   rescue_from Mongoid::Errors::Validations, with: :invalid_request
   #rescue_from Exceptions::Standard, with: :custom_api_error
   
+  before_filter :before_filter
+  
   respond_to :json
+
+  def before_filter
+     $request_id = request.uuid
+  end  
 
   def record_not_found
     error(status: :not_found, message: "URL does not represent a resource")

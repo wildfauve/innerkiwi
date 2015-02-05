@@ -1,31 +1,50 @@
 class CustomerPort < Port
   
-  attr_accessor :party, :status
+  class Error < StandardError ; end
+  class Unavailable < Error ; end
   
-  def create_new_customer(kiwi)
-    conn = Faraday.new(url: Setting.services(:customers, :create))
-    conn.params = customer_msg(kiwi)
-    status_and_parse(resp: conn.post, parse_in_to: "@party")
+  attr_accessor :party, :status
+
+  def create_new_customer(customer: nil)
+    circuit(:create_new_customer_port, kiwi: kiwi)
+    self
   end
 
-  def update_customer(kiwi)
-    conn = Faraday.new(url: kiwi.party_url)
-    conn.params = customer_msg(kiwi)
-    status_and_parse(resp: conn.put, parse_in_to: "@party")
+  def create_new_customer_port(customer: nil)
+    conn = Faraday.new(url: Setting.services(:customers, :create))
+    conn.params = customer_msg(customer)
+    self.send_to_port(pattern: :sync, connection: {object: conn, method: :post}, response_into: "@party")    
   end
   
-  def customer_msg(kiwi)
+  def update_customer(customer: nil, party_url: nil)
+    circuit(:update_customer_port, customer: customer, party_url: party_url)
+    self
+  end
+  
+
+  def update_customer_port(customer: nil, party_url: nil)
+    conn = Faraday.new(url: party_url)
+    conn.params = customer_msg(customer)
+    self.send_to_port(pattern: :sync, connection: {object: conn, method: :put}, response_into: "@party")
+  end
+  
+  def customer_msg(customer)
     {
       kind: "party",
-      name: kiwi[:name],
-      age: kiwi[:age]
+      name: customer[:name],
+      age: customer[:age]
     }
   end
   
-  def get_customer(url: nil)
-    conn = Faraday.new(url: url)
-    status_and_parse(resp: conn.get, parse_in_to: "@party")
+  def get_customer(party_url: nil)
+    circuit(:get_customer_port, party_url: party_url)    
     self
+  end  
+  
+  
+  def get_customer_port(party_url: nil)
+    conn = Faraday.new(url: party_url)
+    self.send_to_port(pattern: :sync, connection: {object: conn, method: :get}, response_into: "@party")
   end
   
   def buy_customer_product(product_url)

@@ -2,28 +2,42 @@ class ProductsPort < Port
   
   attr_accessor :products, :buy, :origination
   
+  class Error < StandardError ; end
+  class Unavailable < Error ; end
   
+
   def get_products
-    conn = Faraday.new(url: Setting.services(:products, :index))
-    resp = conn.get
-    raise if resp.status >= 300
-    @products = JSON.parse(resp.body)
+    circuit(:get_products_interface)
+    self
   end
-  
+
+  def get_products_interface
+    conn = Faraday.new(url: Setting.services(:products, :index))
+    self.send_to_port(pattern: :sync, connection: {object: conn, method: :get}, response_into: "@products")
+  end
+
+
   def buy_product(origination_url: nil, origination: nil)
+    circuit(:buy_product_port, origination_url: origination_url, origination: origination)
+    self
+  end
+
+  def buy_product_port(origination_url: nil, origination: nil)
     conn = Faraday.new(url: origination_url)
     conn.params = origination
-    resp = conn.post
-    raise if resp.status >= 300
-    @buy = JSON.parse(resp.body)
-    @msg = @buy
-    self
+    self.send_to_port(pattern: :sync, connection: {object: conn, method: :post}, response_into: "@buy")    
   end
+
   
   def get_origination(origination_url: nil)
-    conn = Faraday.new(url: origination_url)
-    status_and_parse(resp: conn.get, parse_in_to: "@origination")
+    circuit(:get_origination_interface, origination_url: origination_url)    
     self
+  end  
+    
+    
+  def get_origination_interface(origination_url: nil)
+    conn = Faraday.new(url: origination_url)
+    self.send_to_port(pattern: :sync, connection: {object: conn, method: :get}, response_into: "@origination")        
   end
   
   def reset_origination(link: nil)
@@ -33,8 +47,6 @@ class ProductsPort < Port
     @reset = JSON.parse(resp.body)
     @msg = @reset
     self    
-  end
-    
-  
+  end  
     
 end

@@ -3,7 +3,7 @@ class ProductsManager
   include Wisper::Publisher
   
   def self.all
-    @pp = ProductsPort.new.get_products
+    ProductsPort.new.get_products
   end
   
   def initialize(product_origination_url: nil, kiwi: nil)

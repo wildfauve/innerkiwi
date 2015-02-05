@@ -6,7 +6,7 @@
     </tr>
   </thead>
    <tbody>
-      <% @products["sales_products"].each do |prod| %>
+      <% @products["sales_products"].each do |prod|%>
          <% purch = @kiwi.get_purchase(product: prod) %>
          <tr>
             <td><%= prod["name"]%></td>
@@ -21,7 +21,7 @@
                <td><%= link_to "Buy", buy_products_path(prod_origination_url: prod["_links"]["product_originations"]["href"]), class: "button", method: :put%></td>
             <% end %>
          </tr>
-      <% end %>     
+      <% end %>
    </tbody>
 </table>
 

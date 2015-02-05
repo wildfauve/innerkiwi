@@ -1,7 +1,7 @@
 class ProductsController < ApplicationController
   
   def index
-    @products = ProductsManager.all
+    @products = ProductsManager.all.products
   end
   
   def buy

@@ -1,4 +1,4 @@
-class Api::V1::KiwisController < Api::ApplicationController
+class Api::V1::KiwisController < Api::V1::BaseController
   
   def index
     @kiwis = Kiwi.all

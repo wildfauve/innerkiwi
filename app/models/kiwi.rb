@@ -22,34 +22,35 @@ class Kiwi
   def create_me(cust: nil, current_user_proxy: nil)
     raise if !current_user_proxy
     self.update_attrs(cust: cust, current_user_proxy: current_user_proxy )
-    self.create_links(party: create_party())
+    self.create_links(party: create_party.party)
     self.save
     publish(:successful_save_event, self)
   end
   
   def update_me(cust: nil, current_user_proxy: nil)
-    raise if !current_user_proxy
+    raise if self.user_proxy != current_user_proxy
     self.update_attrs(cust: cust, current_user_proxy: current_user_proxy )
-    party = CustomerPort.new.update_customer(self) if (cust.keys & ["name", "age"]).present?
+    party = CustomerPort.new.update_customer(kiwi: self) if (cust.keys & ["name", "age"]).present?
     self.save
     publish(:successful_save_event, self)
   end
   
   
   def update_attrs(cust: nil, current_user_proxy: nil)
-    raise if !current_user_proxy
+    raise if current_user_proxy.nil?
     self.name = cust[:name]
     self.age = cust[:age]
     self.twitter_handle = cust[:twitter_handle]
-    self.user_proxy = current_user_proxy    
+    self.user_proxy = current_user_proxy if self.user_proxy != current_user_proxy # this has some bizzare behaviour that causes the proxy to be deleted
+    # k = Kiwi.first; k.user_proxy = @current_user_proxy; k.save
   end
   
   def create_party 
-    CustomerPort.new.create_new_customer(self)
+    CustomerPort.new.create_new_customer(customer: self)
   end
   
   def check_party
-    resp = CustomerPort.new.get_customer(url: self.party_url)
+    resp = CustomerPort.new.get_customer(party_url: self.party_url)
     if resp.status == :ok
       self.create_links(party: resp.party)
       self.name = resp.party["party"]["name"] if self.name != resp.party["party"]["name"]
