@@ -9,7 +9,7 @@ class IdPort < Port
 
 
   def get_access_token(auth_code: nil, host: nil)
-    circuit(:get_access_token_interface, auth_code: auth_code, host: host)
+    circuit(method: :get_access_token_interface, auth_code: auth_code, host: host)
     self
   end
   

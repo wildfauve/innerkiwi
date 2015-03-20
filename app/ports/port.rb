@@ -8,7 +8,7 @@ class Port
     @msg["_links"][rel.to_s]["href"]
   end
 
-  def circuit(method, *args)
+  def circuit(method: nil, monitor: true, **args)
     @monitor = PortMonitor.new
     if args.empty?
       cb = CircuitBreaker.new(availability: :wait, method: method, monitor: @monitor) { self.send(method) }
@@ -16,7 +16,7 @@ class Port
       cb = CircuitBreaker.new(availability: :wait, method: method, monitor: @monitor) { |arg| self.send(method, arg) }
     end
     begin
-      cb.call(args[0])
+      cb.call(args)
       raise Port::HTTP_Error, "{@http_status}" if @status == :not_ok
     rescue CircuitBreaker::Error => e
       raise Port::Unavailable, "#{method.to_s} Service is not Available"
@@ -32,6 +32,7 @@ class Port
     @monitor.api(type: :port_request, url: connection[:object].url_prefix.to_s, params: connection[:object].params)
     resp = connection[:object].send(connection[:method])
     @http_status = resp.status
+    @monitor.api(type: :port_response, url: connection[:object].url_prefix.to_s, http_status: @http_status)
     if @http_status < 300
       @status = :ok
       @msg = JSON.parse(resp.body)

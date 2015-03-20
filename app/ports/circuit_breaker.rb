@@ -32,8 +32,9 @@ class CircuitBreaker
         else
           retry
         end
-      ensure
-        #@monitor.send
+      ensure # regardless the monitor record is published
+        # TODO: This probably sends on retry (which means n events)
+        @monitor.send
       end
     when :open
       raise CircuitBreaker::Open

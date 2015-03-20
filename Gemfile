@@ -33,7 +33,7 @@ gem 'rest_client'
 
 gem 'faraday'
 
-gem 'jwt'
+gem 'json-jwt'
 
 gem "bunny"
 

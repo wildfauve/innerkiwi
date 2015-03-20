@@ -48,9 +48,11 @@ class IdentityAdapter
   
   def validate_id_token
     begin
+      key = PKI::PKI.new
       @id_token_encoded = @access_token["id_token"]      
-      @id_token = JWT.decode(@id_token_encoded, Setting.oauth["id_token_secret"]).inject(&:merge)
-    rescue JWT::DecodeError => e
+      @id_token = JSON::JWT.decode(@id_token_encoded, key.key.public_key)
+      #@id_token = JWT.decode(@id_token_encoded, Setting.oauth["id_token_secret"]).inject(&:merge)
+    rescue JSON::JWT::Exception => e
       raise
     end
   end

@@ -30,7 +30,7 @@ class Kiwi
   def update_me(cust: nil, current_user_proxy: nil)
     raise if self.user_proxy != current_user_proxy
     self.update_attrs(cust: cust, current_user_proxy: current_user_proxy )
-    party = CustomerPort.new.update_customer(kiwi: self) if (cust.keys & ["name", "age"]).present?
+    party = CustomerPort.new.update_customer(customer: self, party_url: self.party_url) if (cust.keys & ["name", "age"]).present?
     self.save
     publish(:successful_save_event, self)
   end

@@ -7,7 +7,7 @@ class ProductsPort < Port
   
 
   def get_products
-    circuit(:get_products_interface)
+    circuit(method: :get_products_interface)
     self
   end
 
@@ -18,7 +18,7 @@ class ProductsPort < Port
 
 
   def buy_product(origination_url: nil, origination: nil)
-    circuit(:buy_product_port, origination_url: origination_url, origination: origination)
+    circuit(method: :buy_product_port, origination_url: origination_url, origination: origination)
     self
   end
 
@@ -30,7 +30,7 @@ class ProductsPort < Port
 
   
   def get_origination(origination_url: nil)
-    circuit(:get_origination_interface, origination_url: origination_url)    
+    circuit(method: :get_origination_interface, origination_url: origination_url)    
     self
   end  
     

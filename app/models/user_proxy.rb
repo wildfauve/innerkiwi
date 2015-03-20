@@ -49,7 +49,7 @@ class UserProxy
     self.email = id_token["email"]    
     self.access_token = access_token
     self.id_token = id_token
-    save
+    self.save
     self
   end
   

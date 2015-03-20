@@ -33,4 +33,8 @@ class EventHandler
     self.publish(exchange: "events", message: user_proxy.kiwi.id_kiwi_event)
   end
   
+  def self.port_complete_event(monitor)
+    self.publish(exchange: "events", message: monitor.port_event)
+  end
+  
 end

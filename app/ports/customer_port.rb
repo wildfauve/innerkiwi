@@ -6,7 +6,7 @@ class CustomerPort < Port
   attr_accessor :party, :status
 
   def create_new_customer(customer: nil)
-    circuit(:create_new_customer_port, kiwi: kiwi)
+    circuit(method: :create_new_customer_port, customer: customer)
     self
   end
 
@@ -17,7 +17,7 @@ class CustomerPort < Port
   end
   
   def update_customer(customer: nil, party_url: nil)
-    circuit(:update_customer_port, customer: customer, party_url: party_url)
+    circuit(method: :update_customer_port, customer: customer, party_url: party_url)
     self
   end
   
@@ -37,10 +37,9 @@ class CustomerPort < Port
   end
   
   def get_customer(party_url: nil)
-    circuit(:get_customer_port, party_url: party_url)    
+    circuit(method: :get_customer_port, party_url: party_url)    
     self
   end  
-  
   
   def get_customer_port(party_url: nil)
     conn = Faraday.new(url: party_url)
