@@ -6,7 +6,15 @@ Rails.application.routes.draw do
   
   resources :kiwis
   
-  resources :settings
+  resources :settings do
+    collection do
+      get 'personal'
+      get 'social'
+      get 'profile'      
+    end
+  end
+  
+  resources :profiles, only: [:index]
   
   resources :accounts
   

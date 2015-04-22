@@ -61,4 +61,8 @@ class UserProxy
     end
   end
   
+  def id_token_encoded
+    self.access_token[:id_token]
+  end
+  
 end

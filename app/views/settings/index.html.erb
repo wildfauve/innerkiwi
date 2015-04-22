@@ -1,26 +1,8 @@
-<dl class="accordion" data-accordion>
-  <dd class="accordion-navigation">
-    <a href="#panel1">
-       <i class="fi-torso"></i>
-       Personal       
-    </a>
-    <div id="panel1" class="content active">
-       <%= render partial: "kiwis/personal"%>
-    </div>
-  </dd>
-  <dd class="accordion-navigation">
-    <a href="#panel2">
-       <i class="fi-social-500px"></i>       
-       Social
-    </a>
-    <div id="panel2" class="content">
-       <%= render partial: "kiwis/social"%>    
-    </div>
-  </dd>
-  <dd class="accordion-navigation">
-    <a href="#panel3">Security</a>
-    <div id="panel3" class="content">
-      Panel 3. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-    </div>
-  </dd>
-</dl>
+<div class="row">
+   <div class="small-3 columns">
+      <%= render "icon_bar"%>
+   </div>
+   <div class="small-9 columns">
+      <div id="settings-content"></div>
+   </div>
+</div>

@@ -37,8 +37,13 @@ class CustomerPort < Port
   end
   
   def get_customer(party_url: nil)
-    circuit(method: :get_customer_port, party_url: party_url)    
-    self
+    begin
+      circuit(method: :get_customer_port, party_url: party_url)    
+      self  
+    rescue Port::Unavailable => e
+      self.status = :unavailable
+      self
+    end
   end  
   
   def get_customer_port(party_url: nil)

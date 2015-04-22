@@ -58,8 +58,7 @@ class Kiwi
       self.save
     elsif resp.status == :not_found
       self.create_links(party: create_party())
-    else
-      raise
+    elsif resp.status == :unavailable
     end
   end
   
