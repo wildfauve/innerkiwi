@@ -24,7 +24,7 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 gem 'spring',        group: :development
 
-gem 'mongoid', github: 'mongoid/mongoid'
+gem 'mongoid' #, github: 'mongoid/mongoid'
 gem 'wisper'
 
 #gem 'redis'
@@ -39,7 +39,7 @@ gem "bunny"
 
 gem 'mc-settings'
 
-gem 'foundation-rails'
+gem 'foundation-rails', '5.4.3.1'
 gem 'foundation-icons-sass-rails'
 
 gem 'thin'
@@ -48,7 +48,7 @@ gem "rack-timeout"
 
 group :development do
   gem 'better_errors'
-  gem 'binding_of_caller'  
+  gem 'binding_of_caller'
   gem 'meta_request'
   gem 'pry'
   gem 'railroady'
@@ -67,4 +67,3 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-

@@ -1,20 +1,35 @@
 oauth:
-  client_id: "inner_kiwi"
-  client_secret: "TYWVUbkaujh0nFxDG-oE3A"
-  id_token_secret: "id_token_secret"
-  id_service_url: "http://localhost:3013/authorise"
-  id_token_service_url: "http://localhost:3013/token"
-  id_logout_service_url: "http://localhost:3013/logout"  
-  id_userinfo_service_url: "http://localhost:3013/userinfo"  
-  require_additional_identity: true  
+
+  # Flick Ids
+  # client_id: "oik4bgz0y66oxtcqzc170rcgv0elqx4"
+  # client_secret: "k6zxsuirgpw4mgphtavrz20j64zi5jp"
+  # id_token_secret: "id_token_secret"  #flick_id
+
+  # LIC IDs
+
+  # Local Dev
+  client_id: "51mpz9g189c011rakh5asdq2ge1qp3q" # LIC id
+  client_secret: "tj48npptg8vff1pr1e95a48bb7lennd"  # LIC Id
+
+  # id_service_url: "http://localhost:3013/authorise"
+  # id_token_service_url: "http://localhost:3013/token"
+  # id_logout_service_url: "http://localhost:3013/logout"
+  # id_userinfo_service_url: "http://localhost:3013/userinfo"
+
+  id_service_url: "http://localhost:5000/oauth/authorize"
+  id_token_service_url: "http://localhost:5000/oauth/token"
+  id_userinfo_service_url: "http://localhost:5000/userinfo"
+  id_logout_service_url: "http://localhost:5000/logout"
+  # id_userinfo_service_url: "http://localhost:3013/userinfo"
+  require_additional_identity: true
 services:
   self:
     host: "http://localhost:3020"
   customers:
     index: "http://localhost:3021/api/parties"
     show: "http://localhost:3021/api/parties/{id}"
-    create: "http://localhost:3021/api/v1/parties"    
-  products:     
+    create: "http://localhost:3021/api/v1/parties"
+  products:
     index: "http://localhost:3022/api/v1/sales_products"
-  profiler:     
-    index: "http://localhost:3027/profiles"    
+  profiler:
+    index: "http://localhost:3027/profiles"
